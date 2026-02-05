@@ -1,0 +1,6 @@
+@NhjDotnetApi_HostAddress = http://localhost:5197
+
+GET {{NhjDotnetApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

@@ -1,0 +1,14 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\Application\\Services",
+    "\\Persistence\\Configurations",
+    "\\Persistence\\Repositories",
+    "\\Presentation\\Controllers",
+    "\\Presentation\\Models",
+    "\\Presentation\\SignalR",
+    "\\Properties"
+  ],
+  "SelectedNode": "\\README.md",
+  "PreviewInSolutionExplorer": false
+}

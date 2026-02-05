@@ -1,0 +1,14 @@
+{
+  "name": "nhjdotnetapi",
+  "version": "1.0.0",
+  "description": "**NhjDotnetApi** adalah contoh **ASP.NET Core Web API** yang menerapkan **Clean Architecture**, **in-memory storage**, serta **JWT-based authentication & authorization** untuk mensimulasikan sistem pemesanan (*ordering system*).",
+  "main": "signalr_client.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@microsoft/signalr": "^10.0.0"
+  }
+}

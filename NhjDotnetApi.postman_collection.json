@@ -1,0 +1,197 @@
+{
+	"info": {
+		"_postman_id": "68a660ec-7811-430c-99f6-917312d6bc07",
+		"name": ".NET",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19200618"
+	},
+	"item": [
+		{
+			"name": "GetOrdersApi",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/api/orders",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetOrderById",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"NewStatus\": \"Processing\"\r\n}"
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/api/orders/89273ec1-8fc2-4613-a916-7893c4df99f0",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"orders",
+						"89273ec1-8fc2-4613-a916-7893c4df99f0"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "LoginApi",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"username\": \"admin\",\r\n  \"password\": \"admin123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/api/Auth/login",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"Auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "OrderRequestApi",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"customerName\": \"Naufal\",\r\n  \"items\": [\r\n    { \"productName\": \"RTX 5070 Ti\", \"quantity\": 1, \"price\": 5000000 },\r\n    { \"productName\": \"MSI B660M\", \"quantity\": 1, \"price\": 3000000 }\r\n  ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/api/orders",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UpdateOrderStatusApi",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"newStatus\": 2\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/api/orders/286444be-e1a7-4b6b-a7b7-fa4b3a96343c/status",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"orders",
+						"286444be-e1a7-4b6b-a7b7-fa4b3a96343c",
+						"status"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteOrderApi",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/api/orders/89273ec1-8fc2-4613-a916-7893c4df99f0",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"orders",
+						"89273ec1-8fc2-4613-a916-7893c4df99f0"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW4iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBRE1JTiIsImV4cCI6MTc2NzUyNDUyNCwiaXNzIjoiTmhqSXNzdWVyIiwiYXVkIjoiTmhqQXVkaWVuY2UifQ.jSDKyh6iUR74M5YyIIuCsdjHJYBuUrIuWp-XbksO-ps",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "BASE_URL",
+			"value": ""
+		}
+	]
+}
