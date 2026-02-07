@@ -1,0 +1,73 @@
+<div class="container">
+
+  <!-- Loading -->
+  <div *ngIf="loading">
+    Loading...
+  </div>
+
+  <!-- Error -->
+  <p class="error" *ngIf="error">
+    {{ error }}
+  </p>
+
+  <!-- Order Detail -->
+  <ng-container *ngIf="order && !loading">
+
+    <div class="card">
+
+      <h2>Order Detail</h2>
+
+      <p>
+        <strong>Order ID:</strong>
+        {{ order.id }}
+      </p>
+
+      <p>
+        <strong>Customer:</strong>
+        {{ order.customerName }}
+      </p>
+
+      <p>
+        <strong>Status:&nbsp;</strong>
+        <span class="badge" [ngClass]="order.status.toLowerCase()">
+          {{ order.status }}
+        </span>
+      </p>
+
+      <p>
+        <strong>Created:</strong>
+        {{ order.createdAt | date:'short' }}
+      </p>
+
+      <hr />
+
+      <!-- Items -->
+      <table>
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Price</th>
+            <th>Qty</th>
+            <th>Subtotal</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let i of order.items">
+            <td>{{ i.productName }}</td>
+            <td>{{ i.price | number }}</td>
+            <td>{{ i.quantity }}</td>
+            <td>{{ i.price * i.quantity | number }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>
+        Total: {{ order.totalAmount | number }}
+      </h3>
+
+    </div>
+
+  </ng-container>
+
+</div>

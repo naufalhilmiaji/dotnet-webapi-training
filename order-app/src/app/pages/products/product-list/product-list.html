@@ -1,0 +1,31 @@
+<h2>Products</h2>
+
+<ng-container *ngIf="products$ | async as products; else loading">
+
+  <table *ngIf="products.length; else empty">
+    <tr>
+      <th>Name</th>
+      <th>Price</th>
+      <th>Actions</th>
+    </tr>
+
+    <tr *ngFor="let p of products">
+      <td>{{ p.name }}</td>
+      <td>{{ p.price | number }}</td>
+      <td>
+        <button (click)="view(p.id)">View</button>
+        <button (click)="edit(p.id)">Edit</button>
+        <button (click)="remove(p.id)">Delete</button>
+      </td>
+    </tr>
+  </table>
+
+</ng-container>
+
+<ng-template #loading>
+  <p>Loading...</p>
+</ng-template>
+
+<ng-template #empty>
+  <p>No products found</p>
+</ng-template>

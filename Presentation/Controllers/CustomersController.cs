@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using NhjDotnetApi.Application.Contracts;
 using NhjDotnetApi.Application.DTOs;
 
@@ -32,7 +33,9 @@ public class CustomersController : ControllerBase
     [Authorize(Roles = "ADMIN")]
     public async Task<IActionResult> Create(CustomerRequest request)
     {
-        await _service.CreateAsync(request);
+        var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+        await _service.CreateAsync(request, userId);
         return Ok();
     }
 

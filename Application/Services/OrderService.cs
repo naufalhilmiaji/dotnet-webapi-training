@@ -23,36 +23,51 @@ public class OrderService : IOrderService
 
     public Order CreateOrder(CreateOrderRequest request, Guid userId)
     {
+        // 1. Ambil customer berdasarkan USER LOGIN
         var customer = _db.Customers
-            .FirstOrDefault(c => c.Id == request.CustomerId);
+            .FirstOrDefault(c => c.UserId == userId);
 
         if (customer == null)
-        {
             throw new InvalidOperationException(
-                $"Customer with ID {request.CustomerId} not found"
+                $"Customer for user {userId} not found"
             );
+
+        var items = new List<OrderItem>();
+
+        // 2. Resolve product dari DB (SOURCE OF TRUTH)
+        foreach (var item in request.Items)
+        {
+            var product = _db.Products
+                .FirstOrDefault(p => p.Id == item.ProductId);
+
+            if (product == null)
+                throw new InvalidOperationException(
+                    $"Product with ID {item.ProductId} not found"
+                );
+
+            items.Add(new OrderItem
+            {
+                ProductId = product.Id,
+                ProductName = product.Name,
+                Quantity = item.Quantity,
+                Price = product.Price
+            });
         }
 
-
+        // 3. Buat order
         var order = new Order
         {
-            Id = Guid.NewGuid(),
-            CustomerId = request.CustomerId,
+            CustomerId = customer.Id,
             CustomerName = customer.Name,
             UserId = userId,
             Status = OrderStatus.Pending,
             CreatedAt = DateTime.UtcNow,
-            Items = request.Items.Select(i => new OrderItem
-            {
-                Id = Guid.NewGuid(),
-                ProductName = i.ProductName,
-                Quantity = i.Quantity,
-                Price = i.Price
-            }).ToList()
+            Items = items
         };
 
-
-        order.TotalAmount = order.Items.Sum(i => i.Quantity * i.Price);
+        order.TotalAmount = order.Items.Sum(
+            i => i.Quantity * i.Price
+        );
 
         _db.Orders.Add(order);
         _db.SaveChanges();

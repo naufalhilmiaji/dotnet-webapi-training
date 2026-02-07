@@ -1,0 +1,79 @@
+# ================================
+# .NET / ASP.NET Core
+# ================================
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Build results
+[Bb]uild/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+
+# ================================
+# Visual Studio
+# ================================
+.vs/
+.vscode/
+.idea/
+*.rsuser
+
+# ================================
+# Rider / ReSharper
+# ================================
+_ReSharper*/
+*.DotSettings.user
+
+# ================================
+# ASP.NET Core
+# ================================
+appsettings.Development.json
+appsettings.Production.json
+
+# Keep example config
+!appsettings.json
+
+# ================================
+# EF Core / Database
+# ================================
+*.mdf
+*.ldf
+*.db
+*.db-shm
+*.db-wal
+
+# ================================
+# Logs
+# ================================
+*.log
+logs/
+Logs/
+
+# ================================
+# OS generated
+# ================================
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store
+
+# ================================
+# Environment variables
+# ================================
+.env
+.env.*
+
+# ================================
+# Docker (optional)
+# ================================
+docker-compose.override.yml
+
+# ================================
+# Publish output
+# ================================
+publish/

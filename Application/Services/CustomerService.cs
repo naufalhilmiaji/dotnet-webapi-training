@@ -16,6 +16,7 @@ public class CustomerService : ICustomerService
     public async Task<List<CustomerResponse>> GetAllAsync()
     {
         var customers = await _repo.GetAllAsync();
+
         return customers.Select(c => new CustomerResponse
         {
             Id = c.Id,
@@ -39,14 +40,23 @@ public class CustomerService : ICustomerService
         };
     }
 
-    public async Task CreateAsync(CustomerRequest request)
+    public async Task CreateAsync(CustomerRequest request, Guid userId)
     {
+        // (opsional tapi bagus) 1 user = 1 customer
+        var exists = await _repo.ExistsByUserIdAsync(userId);
+        if (exists)
+            throw new InvalidOperationException(
+                "User already has a customer"
+            );
+
         var customer = new Customer
         {
             Id = Guid.NewGuid(),
+            UserId = userId,
             Name = request.Name,
             Email = request.Email,
-            Phone = request.Phone
+            Phone = request.Phone,
+            CreatedAt = DateTime.UtcNow
         };
 
         await _repo.AddAsync(customer);

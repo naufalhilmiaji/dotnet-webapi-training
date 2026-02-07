@@ -17,11 +17,32 @@ using NhjDotnetApi.Persistence;
 using NhjDotnetApi.Presentation.SignalR;
 using NhjDotnetApi.Persistence.Configurations;
 using NhjDotnetApi.Persistence.Repositories;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngular",
+        policy =>
+        {
+            policy
+                .WithOrigins("http://localhost:4200")
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials();
+        });
+});
+
 // Controllers
-builder.Services.AddControllers();
+builder.Services
+    .AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(
+            new JsonStringEnumConverter()
+        );
+    });
 
 // DbContext (EF Core)
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -81,23 +102,41 @@ builder.Services.AddSwaggerGen(c =>
 // JWT Authentication
 var jwtConfig = builder.Configuration.GetSection("Jwt");
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
+builder.Services
+  .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+  .AddJwtBearer(options =>
+  {
+      options.TokenValidationParameters = new TokenValidationParameters
+      {
+          ValidateIssuer = true,
+          ValidateAudience = true,
+          ValidateLifetime = true,
+          ValidateIssuerSigningKey = true,
+          ValidIssuer = builder.Configuration["Jwt:Issuer"],
+          ValidAudience = builder.Configuration["Jwt:Audience"],
+          IssuerSigningKey = new SymmetricSecurityKey(
+              Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!)
+          )
+      };
 
-            ValidIssuer = jwtConfig["Issuer"],
-            ValidAudience = jwtConfig["Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(jwtConfig["Key"]!)
-            )
-        };
-    });
+      // 🔥 INI YANG HILANG
+      options.Events = new JwtBearerEvents
+      {
+          OnMessageReceived = context =>
+          {
+              var accessToken = context.Request.Query["access_token"];
+              var path = context.HttpContext.Request.Path;
+
+              if (!string.IsNullOrEmpty(accessToken) &&
+                  path.StartsWithSegments("/hubs/orders"))
+              {
+                  context.Token = accessToken;
+              }
+
+              return Task.CompletedTask;
+          }
+      };
+  });
 
 builder.Services.AddAuthorization();
 builder.Services.AddSignalR();
@@ -123,11 +162,12 @@ app.UseSwagger();
 app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
+app.UseCors("AllowAngular");
 
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-app.MapHub<OrderHub>("/hubs/orders");
+app.MapHub<OrderHub>("/hubs/orders").RequireAuthorization();
 
 app.Run();

@@ -9,26 +9,36 @@ public class OrderHub : Hub<IOrderClient>
 {
     public override async Task OnConnectedAsync()
     {
-        var userId = Context.User?.FindFirstValue(ClaimTypes.NameIdentifier);
-        var role = Context.User?.FindFirstValue(ClaimTypes.Role);
+        var userId = Context.User?
+            .FindFirstValue(ClaimTypes.NameIdentifier);
+
+        var role = Context.User?
+            .FindFirstValue(ClaimTypes.Role);
 
         if (!string.IsNullOrEmpty(userId))
         {
-            // Group per user (important for ownership)
+            // Group per user (order ownership)
             await Groups.AddToGroupAsync(
                 Context.ConnectionId,
                 $"user-{userId}"
+            );
+
+            Console.WriteLine(
+                $"SignalR: User {userId} joined group user-{userId}"
             );
         }
 
         if (role == "ADMIN")
         {
-            // Admin group (can receive all notifications)
+            // Admin group (receive all order notifications)
             await Groups.AddToGroupAsync(
                 Context.ConnectionId,
                 "admins"
             );
+
+            Console.WriteLine("SignalR: Admin joined group admins");
         }
+
         Console.WriteLine("SignalR client connected");
 
         await base.OnConnectedAsync();
@@ -36,7 +46,11 @@ public class OrderHub : Hub<IOrderClient>
 
     public override async Task OnDisconnectedAsync(Exception? exception)
     {
-        var userId = Context.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+        var userId = Context.User?
+            .FindFirstValue(ClaimTypes.NameIdentifier);
+
+        var role = Context.User?
+            .FindFirstValue(ClaimTypes.Role);
 
         if (!string.IsNullOrEmpty(userId))
         {
@@ -45,6 +59,16 @@ public class OrderHub : Hub<IOrderClient>
                 $"user-{userId}"
             );
         }
+
+        if (role == "ADMIN")
+        {
+            await Groups.RemoveFromGroupAsync(
+                Context.ConnectionId,
+                "admins"
+            );
+        }
+
+        Console.WriteLine("SignalR client disconnected");
 
         await base.OnDisconnectedAsync(exception);
     }

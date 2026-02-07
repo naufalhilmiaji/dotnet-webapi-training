@@ -1,0 +1,59 @@
+<div class="container">
+  <div class="card">
+    <h2>Create Order</h2>
+
+    <div class="actions">
+      <select [(ngModel)]="selectedProductId">
+        <option value="" disabled selected>
+          -- Select product --
+        </option>
+
+        <option *ngFor="let p of products" [value]="p.id">
+          {{ p.name }} ({{ p.price | number }})
+        </option>
+      </select>
+
+
+      <input type="number" [(ngModel)]="quantity" min="1" />
+      <button (click)="addItem()">Add</button>
+    </div>
+  </div>
+
+  <button (click)="submitOrder()" [disabled]="loading || !items.length">
+    {{ loading ? 'Saving...' : 'Create Order' }}
+  </button>
+
+  <p class="error" *ngIf="error">{{ error }}</p>
+
+  <hr />
+
+  <table *ngIf="items.length">
+    <thead>
+      <tr>
+        <th>Product</th>
+        <th>Price</th>
+        <th>Qty</th>
+        <th>Subtotal</th>
+        <th></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let i of items">
+        <td>{{ i.productId }}</td>
+        <td>{{ i.productName }}</td>
+        <td>{{ i.price | number }}</td>
+        <td>{{ i.quantity }}</td>
+        <td>{{ i.price * i.quantity | number }}</td>
+        <td>
+          <button (click)="removeItem(i.productId)">X</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 *ngIf="items.length">
+    Total: {{ totalAmount | number }}
+  </h3>
+
+</div>

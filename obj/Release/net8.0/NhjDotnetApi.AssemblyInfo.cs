@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("NhjDotnetApi")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5a3ece6c255fa258824bcfef2e408b3e893ba452")]
 [assembly: System.Reflection.AssemblyProductAttribute("NhjDotnetApi")]
 [assembly: System.Reflection.AssemblyTitleAttribute("NhjDotnetApi")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

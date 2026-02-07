@@ -1,0 +1,38 @@
+<div class="container">
+  <div class="card">
+    <h2>Orders</h2>
+
+    <p *ngIf="loading">Loading...</p>
+    <p class="error" *ngIf="error">{{ error }}</p>
+
+    <table *ngIf="!loading && orders.length">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Customer</th>
+          <th>Total</th>
+          <th>Status</th>
+          <th>Created</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let o of orders" [class.updated]="o.updated">
+          <td>
+            <a [routerLink]="['/orders', o.id]">{{ o.id }}</a>
+          </td>
+          <td>{{ o.customerName }}</td>
+          <td>{{ o.totalAmount | number }}</td>
+          <td>
+            <span class="badge" [ngClass]="o.status.toLowerCase()">
+              {{ o.status }}
+            </span>
+          </td>
+          <td>{{ o.createdAt | date:'short' }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p *ngIf="!loading && !orders.length">No orders found</p>
+  </div>
+
+</div>

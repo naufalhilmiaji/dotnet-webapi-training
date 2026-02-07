@@ -17,7 +17,10 @@ public class CustomerRepository : ICustomerRepository
         => await _db.Customers.ToListAsync();
 
     public async Task<Customer?> GetByIdAsync(Guid id)
-        => await _db.Customers.FirstOrDefaultAsync(c => c.Id == id);
+        => await _db.Customers.FindAsync(id);
+
+    public async Task<bool> ExistsByUserIdAsync(Guid userId)
+        => await _db.Customers.AnyAsync(c => c.UserId == userId);
 
     public async Task AddAsync(Customer customer)
     {

@@ -1,14 +1,13 @@
 {
   "ExpandedNodes": [
     "",
-    "\\Application\\Services",
-    "\\Persistence\\Configurations",
-    "\\Persistence\\Repositories",
-    "\\Presentation\\Controllers",
-    "\\Presentation\\Models",
-    "\\Presentation\\SignalR",
-    "\\Properties"
+    "\\order-app",
+    "\\order-app\\src",
+    "\\order-app\\src\\app",
+    "\\order-app\\src\\app\\pages",
+    "\\order-app\\src\\app\\pages\\login",
+    "\\order-app\\src\\app\\services"
   ],
-  "SelectedNode": "\\README.md",
+  "SelectedNode": "\\order-app\\src\\app\\app.config.ts",
   "PreviewInSolutionExplorer": false
 }

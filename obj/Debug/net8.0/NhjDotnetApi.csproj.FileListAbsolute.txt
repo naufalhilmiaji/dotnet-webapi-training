@@ -162,3 +162,10 @@ D:\My Projects\.NET\NhjDotnetApi\bin\Debug\net8.0\ExcelNumberFormat.dll
 D:\My Projects\.NET\NhjDotnetApi\bin\Debug\net8.0\RBush.dll
 D:\My Projects\.NET\NhjDotnetApi\bin\Debug\net8.0\SixLabors.Fonts.dll
 D:\My Projects\.NET\NhjDotnetApi\bin\Debug\net8.0\System.IO.Packaging.dll
+D:\My Projects\.NET\NhjDotnetApi\bin\Debug\net8.0\order-app\angular.json
+D:\My Projects\.NET\NhjDotnetApi\bin\Debug\net8.0\order-app\package-lock.json
+D:\My Projects\.NET\NhjDotnetApi\bin\Debug\net8.0\order-app\package.json
+D:\My Projects\.NET\NhjDotnetApi\bin\Debug\net8.0\order-app\tsconfig.app.json
+D:\My Projects\.NET\NhjDotnetApi\bin\Debug\net8.0\order-app\tsconfig.json
+D:\My Projects\.NET\NhjDotnetApi\bin\Debug\net8.0\order-app\tsconfig.spec.json
+D:\My Projects\.NET\NhjDotnetApi\obj\Debug\net8.0\NhjDotnetApi.sourcelink.json
