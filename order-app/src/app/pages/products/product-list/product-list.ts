@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, Inject, PLATFORM_ID } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 import { ProductService } from '../../../services/product.service';
 import { Product } from '../../../models/product.model';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { shareReplay } from 'rxjs/operators';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-product-list',
@@ -14,15 +15,22 @@ import { shareReplay } from 'rxjs/operators';
 })
 export class ProductListComponent {
 
-  products$: Observable<Product[]>;
+  products$: Observable<Product[]> = of([]);
+  isAdmin = false;
 
   constructor(
     private productService: ProductService,
-    private router: Router
+    private router: Router,
+    private auth: AuthService,
+    @Inject(PLATFORM_ID) platformId: Object
   ) {
-    this.products$ = this.productService
-      .getProducts()
-      .pipe(shareReplay(1));
+    if (isPlatformBrowser(platformId)) {
+      // ✅ browser only
+      this.products$ = this.productService
+        .getProducts()
+        .pipe(shareReplay(1));
+    }
+    this.isAdmin = this.auth.getRole() === 'ADMIN';
   }
 
   view(id: string) {
@@ -36,13 +44,15 @@ export class ProductListComponent {
   remove(id: string) {
     if (!confirm('Delete this product?')) return;
 
-    this.productService.delete(id).subscribe({
-      next: () => {
-        // re-fetch after delete
-        this.products$ = this.productService
-          .getProducts()
-          .pipe(shareReplay(1));
-      }
+    this.productService.delete(id).subscribe(() => {
+      // refresh list (browser only)
+      this.products$ = this.productService
+        .getProducts()
+        .pipe(shareReplay(1));
     });
+  }
+
+  create() {
+    this.router.navigate(['/products/create']);
   }
 }

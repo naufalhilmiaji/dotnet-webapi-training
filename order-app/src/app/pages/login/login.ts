@@ -9,7 +9,7 @@ import { AuthService } from '../../services/auth.service';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './login.html',
-  styleUrls: ['./login.css']
+  styleUrls: ['./login.css'],
 })
 export class LoginComponent {
   username = '';
@@ -20,7 +20,7 @@ export class LoginComponent {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
   ) {}
 
   /**
@@ -35,18 +35,16 @@ export class LoginComponent {
     this.error = '';
     this.loading = true;
 
-    this.authService.login(this.username, this.password)
-      .subscribe({
-        next: () => {
-          const returnUrl =
-            this.route.snapshot.queryParamMap.get('returnUrl') || '/orders';
+    this.authService.login(this.username, this.password).subscribe({
+      next: () => {
+        const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') || '/orders';
 
-          this.router.navigateByUrl(returnUrl);
-        },
-        error: () => {
-          this.error = 'Invalid username or password';
-          this.loading = false;
-        }
-      });
+        this.router.navigateByUrl(returnUrl);
+      },
+      error: (err) => {
+        this.error = err.error?.message || err.error || 'Invalid username or password';
+        this.loading = false;
+      },
+    });
   }
 }

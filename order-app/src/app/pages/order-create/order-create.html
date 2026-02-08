@@ -2,24 +2,29 @@
   <div class="card">
     <h2>Create Order</h2>
 
+    <div class="customer-select">
+      <label>Customer:</label>
+      <select [(ngModel)]="selectedCustomerId">
+        <option [ngValue]="null" disabled selected>-- Select Customer --</option>
+        <option *ngFor="let c of customers" [value]="c.id">{{ c.name }} ({{ c.email }})</option>
+      </select>
+    </div>
+
     <div class="actions">
       <select [(ngModel)]="selectedProductId">
-        <option value="" disabled selected>
-          -- Select product --
-        </option>
+        <option value="" disabled selected>-- Select product --</option>
 
         <option *ngFor="let p of products" [value]="p.id">
           {{ p.name }} ({{ p.price | number }})
         </option>
       </select>
 
-
       <input type="number" [(ngModel)]="quantity" min="1" />
       <button (click)="addItem()">Add</button>
     </div>
   </div>
 
-  <button (click)="submitOrder()" [disabled]="loading || !items.length">
+  <button (click)="submitOrder()" [disabled]="loading || !items.length || !selectedCustomerId">
     {{ loading ? 'Saving...' : 'Create Order' }}
   </button>
 
@@ -52,8 +57,5 @@
     </tbody>
   </table>
 
-  <h3 *ngIf="items.length">
-    Total: {{ totalAmount | number }}
-  </h3>
-
+  <h3 *ngIf="items.length">Total: {{ totalAmount | number }}</h3>
 </div>

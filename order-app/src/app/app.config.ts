@@ -9,8 +9,6 @@ import { httpErrorInterceptor } from './services/http-error.interceptor';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
-    provideHttpClient(
-      withInterceptors([authInterceptor, httpErrorInterceptor])
-    )
-  ]
+    provideHttpClient(withInterceptors([authInterceptor, httpErrorInterceptor])),
+  ],
 };

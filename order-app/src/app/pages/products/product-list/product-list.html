@@ -6,19 +6,25 @@
     <tr>
       <th>Name</th>
       <th>Price</th>
-      <th>Actions</th>
+      <th>Stock</th>
+      <th *ngIf="isAdmin">Actions</th>
     </tr>
 
     <tr *ngFor="let p of products">
       <td>{{ p.name }}</td>
       <td>{{ p.price | number }}</td>
+      <td>{{ p.stock | number }}</td>
       <td>
-        <button (click)="view(p.id)">View</button>
-        <button (click)="edit(p.id)">Edit</button>
-        <button (click)="remove(p.id)">Delete</button>
+        <button *ngIf="isAdmin" (click)="view(p.id)">View</button>
+        <button *ngIf="isAdmin" (click)="edit(p.id)">Edit</button>
+        <button *ngIf="isAdmin" (click)="remove(p.id)">Delete</button>
       </td>
     </tr>
   </table>
+
+  <button *ngIf="isAdmin" class="btn-primary" (click)="create()">
+    + New Product
+  </button>
 
 </ng-container>
 

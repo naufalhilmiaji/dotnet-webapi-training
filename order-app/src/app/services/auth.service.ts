@@ -6,6 +6,8 @@ import { Observable, tap } from 'rxjs';
 interface LoginResponse {
   token: string;
   role: string;
+  success?: boolean;
+  message?: string;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -18,7 +20,7 @@ export class AuthService {
 
   constructor(
     private http: HttpClient,
-    @Inject(PLATFORM_ID) platformId: Object
+    @Inject(PLATFORM_ID) platformId: Object,
   ) {
     this.isBrowser = isPlatformBrowser(platformId);
 
@@ -29,7 +31,7 @@ export class AuthService {
   }
 
   init(): Promise<void> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       if (this.isBrowser) {
         this.token = localStorage.getItem('token');
         this.role = localStorage.getItem('role');
@@ -42,19 +44,21 @@ export class AuthService {
    * Login user and persist auth state
    */
   login(username: string, password: string): Observable<LoginResponse> {
-    return this.http
-      .post<LoginResponse>(`${this.apiUrl}/login`, { username, password })
-      .pipe(
-        tap(res => {
-          this.token = res.token;
-          this.role = res.role;
+    return this.http.post<LoginResponse>(`${this.apiUrl}/login`, { username, password }).pipe(
+      tap((res) => {
+        if (!res.token) {
+          throw new Error(res.message || 'Login failed');
+        }
 
-          if (this.isBrowser) {
-            localStorage.setItem('token', res.token);
-            localStorage.setItem('role', res.role);
-          }
-        })
-      );
+        this.token = res.token;
+        this.role = res.role;
+
+        if (this.isBrowser) {
+          localStorage.setItem('token', res.token);
+          localStorage.setItem('role', res.role);
+        }
+      }),
+    );
   }
 
   /**

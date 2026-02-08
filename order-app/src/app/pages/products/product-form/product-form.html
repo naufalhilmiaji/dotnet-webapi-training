@@ -1,0 +1,35 @@
+<h2>{{ isEdit ? 'Edit Product' : 'Create Product' }}</h2>
+
+<form class="form" [formGroup]="form" (ngSubmit)="submit()">
+
+    <div class="form-group">
+        <label for="name">Product Name</label>
+        <input id="name" type="text" formControlName="name" placeholder="e.g. Mechanical Keyboard" />
+    </div>
+
+    <div class="form-group">
+        <label for="description">Description</label>
+        <textarea id="description" formControlName="description" placeholder="Product description..."
+            rows="4"></textarea>
+    </div>
+
+    <div class="form-group">
+        <label for="price">Price</label>
+        <input id="price" type="number" formControlName="price" placeholder="e.g. 1250000" />
+    </div>
+
+    <div class="form-group">
+        <label for="stock">Stock</label>
+        <input id="stock" type="number" formControlName="stock" placeholder="e.g. 10" />
+    </div>
+
+    <div class="form-actions">
+        <button type="submit" [disabled]="form.invalid || loading">
+            {{ loading ? 'Saving…' : 'Save' }}
+        </button>
+
+        <button type="button" class="secondary" (click)="cancel()" [disabled]="loading">
+            Cancel
+        </button>
+    </div>
+</form>

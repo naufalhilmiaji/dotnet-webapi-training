@@ -17,26 +17,29 @@ public class CustomerService : ICustomerService
     {
         var customers = await _repo.GetAllAsync();
 
-        return customers.Select(c => new CustomerResponse
-        {
-            Id = c.Id,
-            Name = c.Name,
-            Email = c.Email,
-            Phone = c.Phone
-        }).ToList();
+        return customers
+            .Select(c => new CustomerResponse
+            {
+                Id = c.Id,
+                Name = c.Name,
+                Email = c.Email,
+                Phone = c.Phone,
+            })
+            .ToList();
     }
 
     public async Task<CustomerResponse?> GetByIdAsync(Guid id)
     {
         var customer = await _repo.GetByIdAsync(id);
-        if (customer == null) return null;
+        if (customer == null)
+            return null;
 
         return new CustomerResponse
         {
             Id = customer.Id,
             Name = customer.Name,
             Email = customer.Email,
-            Phone = customer.Phone
+            Phone = customer.Phone,
         };
     }
 
@@ -45,9 +48,7 @@ public class CustomerService : ICustomerService
         // (opsional tapi bagus) 1 user = 1 customer
         var exists = await _repo.ExistsByUserIdAsync(userId);
         if (exists)
-            throw new InvalidOperationException(
-                "User already has a customer"
-            );
+            throw new InvalidOperationException("User already has a customer");
 
         var customer = new Customer
         {
@@ -56,7 +57,7 @@ public class CustomerService : ICustomerService
             Name = request.Name,
             Email = request.Email,
             Phone = request.Phone,
-            CreatedAt = DateTime.UtcNow
+            CreatedAt = DateTime.UtcNow,
         };
 
         await _repo.AddAsync(customer);
@@ -65,7 +66,8 @@ public class CustomerService : ICustomerService
     public async Task<bool> UpdateAsync(Guid id, CustomerRequest request)
     {
         var customer = await _repo.GetByIdAsync(id);
-        if (customer == null) return false;
+        if (customer == null)
+            return false;
 
         customer.Name = request.Name;
         customer.Email = request.Email;
@@ -78,7 +80,8 @@ public class CustomerService : ICustomerService
     public async Task<bool> DeleteAsync(Guid id)
     {
         var customer = await _repo.GetByIdAsync(id);
-        if (customer == null) return false;
+        if (customer == null)
+            return false;
 
         await _repo.DeleteAsync(customer);
         return true;

@@ -1,41 +1,47 @@
+using Microsoft.EntityFrameworkCore;
 using NhjDotnetApi.Application.Contracts;
 using NhjDotnetApi.Application.DTOs;
 using NhjDotnetApi.Domain.Entities;
+using NhjDotnetApi.Persistence;
 
 namespace NhjDotnetApi.Application.Services;
 
 public class ProductService : IProductService
 {
-    private readonly IProductRepository _repo;
+    private readonly AppDbContext _db;
 
-    public ProductService(IProductRepository repo)
+    public ProductService(AppDbContext db)
     {
-        _repo = repo;
+        _db = db;
     }
 
     public async Task<List<ProductResponse>> GetAllAsync()
     {
-        var products = await _repo.GetAllAsync();
-        return products.Select(p => new ProductResponse
-        {
-            Id = p.Id,
-            Name = p.Name,
-            Description = p.Description,
-            Price = p.Price
-        }).ToList();
+        return await _db
+            .Products.Select(p => new ProductResponse
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Description = p.Description,
+                Price = p.Price,
+                Stock = p.Stock,
+            })
+            .ToListAsync();
     }
 
     public async Task<ProductResponse?> GetByIdAsync(Guid id)
     {
-        var product = await _repo.GetByIdAsync(id);
-        if (product == null) return null;
+        var product = await _db.Products.FindAsync(id);
+        if (product == null)
+            return null;
 
         return new ProductResponse
         {
             Id = product.Id,
             Name = product.Name,
             Description = product.Description,
-            Price = product.Price
+            Price = product.Price,
+            Stock = product.Stock,
         };
     }
 
@@ -46,31 +52,37 @@ public class ProductService : IProductService
             Id = Guid.NewGuid(),
             Name = request.Name,
             Description = request.Description,
-            Price = request.Price
+            Price = request.Price,
+            Stock = request.Stock,
         };
 
-        await _repo.AddAsync(product);
+        _db.Products.Add(product);
+        await _db.SaveChangesAsync();
     }
 
     public async Task<bool> UpdateAsync(Guid id, ProductRequest request)
     {
-        var product = await _repo.GetByIdAsync(id);
-        if (product == null) return false;
+        var product = await _db.Products.FindAsync(id);
+        if (product == null)
+            return false;
 
         product.Name = request.Name;
         product.Description = request.Description;
         product.Price = request.Price;
+        product.Stock = request.Stock;
 
-        await _repo.UpdateAsync(product);
+        await _db.SaveChangesAsync();
         return true;
     }
 
     public async Task<bool> DeleteAsync(Guid id)
     {
-        var product = await _repo.GetByIdAsync(id);
-        if (product == null) return false;
+        var product = await _db.Products.FindAsync(id);
+        if (product == null)
+            return false;
 
-        await _repo.DeleteAsync(product);
+        _db.Products.Remove(product);
+        await _db.SaveChangesAsync();
         return true;
     }
 }

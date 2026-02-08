@@ -12,7 +12,7 @@ using NhjDotnetApi.Persistence;
 namespace NhjDotnetApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260207144237_InitialCreate")]
+    [Migration("20260208010827_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />

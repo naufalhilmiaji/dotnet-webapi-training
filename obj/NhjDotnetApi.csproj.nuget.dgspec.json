@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\My Projects\\.NET\\NhjDotnetApi\\NhjDotnetApi.csproj": {}
+    "D:\\My Projects\\Github\\dotnet-webapi-training\\NhjDotnetApi.csproj": {}
   },
   "projects": {
-    "D:\\My Projects\\.NET\\NhjDotnetApi\\NhjDotnetApi.csproj": {
+    "D:\\My Projects\\Github\\dotnet-webapi-training\\NhjDotnetApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\My Projects\\.NET\\NhjDotnetApi\\NhjDotnetApi.csproj",
+        "projectUniqueName": "D:\\My Projects\\Github\\dotnet-webapi-training\\NhjDotnetApi.csproj",
         "projectName": "NhjDotnetApi",
-        "projectPath": "D:\\My Projects\\.NET\\NhjDotnetApi\\NhjDotnetApi.csproj",
+        "projectPath": "D:\\My Projects\\Github\\dotnet-webapi-training\\NhjDotnetApi.csproj",
         "packagesPath": "C:\\Users\\Naufal Hilmiaji\\.nuget\\packages\\",
-        "outputPath": "D:\\My Projects\\.NET\\NhjDotnetApi\\obj\\",
+        "outputPath": "D:\\My Projects\\Github\\dotnet-webapi-training\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

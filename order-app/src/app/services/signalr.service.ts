@@ -4,53 +4,61 @@ import { AuthService } from './auth.service';
 import { ToastService } from './toast.service';
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root',
 })
 export class SignalRService {
+  private hubConnection!: signalR.HubConnection;
 
-    private hubConnection!: signalR.HubConnection;
+  constructor(
+    private authService: AuthService,
+    private toast: ToastService,
+  ) {}
 
-    constructor(
-        private authService: AuthService,
-        private toast: ToastService
-    ) { }
+  connect() {
+    if (typeof window === 'undefined') return;
 
-    connect() {
-        if (typeof window === 'undefined') return;
-        if (this.hubConnection?.state === 'Connected') return;
-
-        const token = this.authService.getToken();
-        if (!token) {
-            console.warn('SignalR skipped: no token yet');
-            return;
-        }
-
-        this.hubConnection = new signalR.HubConnectionBuilder()
-            .withUrl('http://localhost:5197/hubs/orders', {
-                accessTokenFactory: () => token
-            })
-            .withAutomaticReconnect()
-            .build();
-
-        this.hubConnection.start()
-            .then(() => console.log('SignalR connected'))
-            .catch(err => console.error('SignalR error:', err));
-    }
-
-
-    onOrderStatusUpdated(
-        callback: (orderId: string, status: string) => void
+    // Jangan reconnect kalau sudah connected / connecting
+    if (
+      this.hubConnection &&
+      this.hubConnection.state !== signalR.HubConnectionState.Disconnected
     ) {
-        this.hubConnection.on(
-            'OrderStatusUpdated',
-            (orderId: string, status: string) => {
-                callback(orderId, status);
-            }
-        );
+      return;
     }
 
-    disconnect() {
-        this.hubConnection?.stop();
-        this.hubConnection = undefined!;
+    const token = this.authService.getToken();
+    if (!token) {
+      console.warn('SignalR skipped: no token');
+      return;
     }
+
+    this.hubConnection = new signalR.HubConnectionBuilder()
+      .withUrl('http://localhost:5197/hubs/orders', {
+        accessTokenFactory: () => token,
+      })
+
+      // ❌ JANGAN infinite reconnect
+      .withAutomaticReconnect({
+        nextRetryDelayInMilliseconds: () => null,
+      })
+      .build();
+
+    this.hubConnection
+      .start()
+      .then(() => console.log('SignalR connected'))
+      .catch((err) => {
+        console.warn('SignalR auth failed, logging out');
+        this.authService.logout();
+      });
+  }
+
+  onOrderStatusUpdated(callback: (orderId: string, status: string) => void) {
+    this.hubConnection.on('OrderStatusUpdated', (orderId: string, status: string) => {
+      callback(orderId, status);
+    });
+  }
+
+  disconnect() {
+    this.hubConnection?.stop();
+    this.hubConnection = undefined!;
+  }
 }

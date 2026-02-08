@@ -1,9 +1,6 @@
 <div class="container">
-
   <!-- Loading -->
-  <div *ngIf="loading">
-    Loading...
-  </div>
+  <div *ngIf="loading">Loading...</div>
 
   <!-- Error -->
   <p class="error" *ngIf="error">
@@ -12,9 +9,7 @@
 
   <!-- Order Detail -->
   <ng-container *ngIf="order && !loading">
-
     <div class="card">
-
       <h2>Order Detail</h2>
 
       <p>
@@ -36,7 +31,7 @@
 
       <p>
         <strong>Created:</strong>
-        {{ order.createdAt | date:'short' }}
+        {{ order.createdAt | date: 'short' }}
       </p>
 
       <hr />
@@ -62,12 +57,7 @@
         </tbody>
       </table>
 
-      <h3>
-        Total: {{ order.totalAmount | number }}
-      </h3>
-
+      <h3>Total: {{ order.totalAmount | number }}</h3>
     </div>
-
   </ng-container>
-
 </div>
